@@ -53,10 +53,28 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 
 		GridBagConstraints con = new GridBagConstraints();
 		playArea.setPreferredSize(new Dimension(900,300));
+
+		GridBagConstraints pcon = new GridBagConstraints();
+		pcon.gridheight = 1;
+		pcon.gridwidth = 3;
+		JButton hbtn = new JButton();
+		hbtn.setText("Hit");
+		hbtn.setFont(new Font("Arial", Font.PLAIN, 16));
+		pcon.gridx = 0;
+		pcon.gridy = 1;
+		playArea.add(hbtn);
+
+		JButton sbtn = new JButton();
+		sbtn.setText("Stand");
+		sbtn.setFont(new Font("Arial", Font.PLAIN, 16));
+		pcon.gridx = 3;
+		pcon.gridy = 1;
+		playArea.add(sbtn);
+
 		con.gridx = 0;
 		con.weightx = 1;
 		con.weighty = 1;
-		con.fill = GridBagConstraints.BOTH;
+
 
 		con.gridy = 0;
 		cont.add(cardArea, con);
@@ -64,19 +82,24 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 		con.gridy = 2;
 		cont.add(playArea, con);
 
-		JButton btn = new JButton();
-		btn.setText("card");
-		btn.setFont(new Font("Arial", Font.PLAIN, 16));
-		btn.addActionListener(e -> {
-			Card card = new Card((int)(Math.random() * 13) + 1, Card.Suit.Hearts);
+
+		
+		hbtn.addActionListener(e -> {
+			Card card = randomCard();
 			cardArea.add(card);
 			System.out.println(card);
 			this.setVisible(true);
-			
 		});
 
-		playArea.add(btn);
+
 		this.setVisible(true);
+	}
+
+	public Card randomCard() {
+		int rsuit = (int)(Math.random()*4)+1;
+		int rval = (int)(Math.random()*13)+1;
+		Card rCard = new Card(rval, Card.Suit.values()[rsuit]);
+		return rCard;
 	}
 
 	@Override
