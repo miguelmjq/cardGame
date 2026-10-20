@@ -27,7 +27,7 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 		this.game = game;
 		// Create and set up the window.
 		setTitle("Blackjack");
-		setSize(900, 600);
+		setSize(1500, 1000);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		// this supplies the background
