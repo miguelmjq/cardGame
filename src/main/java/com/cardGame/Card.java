@@ -108,7 +108,7 @@ public class Card extends JPanel{
 			}
 			
 			positionOffset = new Point(0,0);
-			setPreferredSize(new Dimension(50,70));
+			setPreferredSize(new Dimension(100,140));
 			setOpaque(false);
 		}
 		
