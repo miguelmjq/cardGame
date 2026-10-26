@@ -1,3 +1,7 @@
+//Miguel M Querales
+//10/23
+// sets up the gui for blackjack
+
 package com.cardGame;
 
 import javax.imageio.ImageIO;
@@ -16,6 +20,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.file.Path;
+import java.util.Stack;
 
 @SuppressWarnings("unused")
 public class GUI extends JFrame implements ActionListener, MouseListener, MouseMotionListener {
@@ -47,114 +52,90 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setResizable(false);
 		Container cont = getContentPane();
-		cont.setLayout(new GridBagLayout());
-		
-		// creates dealerarea
-		JPanel dealerArea = new JPanel(new BorderLayout(15, 0));
-		dealerArea.setBorder(BorderFactory.createLineBorder(Color.magenta));
+		cont.setLayout(new BorderLayout(10, 10));
+
+		JPanel dealerArea = new JPanel(new GridLayout(1, 2, 10, 0));
+		dealerArea.setBorder(BorderFactory.createLineBorder(Color.magenta, 2));
 		dealerArea.setOpaque(false);
-		dealerArea.setPreferredSize(new Dimension(1400, 300));
+		dealerArea.setPreferredSize(new Dimension(1400, 250));
 
-		JPanel dealerCards = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 20));
-		dealerCards.setOpaque(false);
-		dealerArea.add(dealerCards, BorderLayout.CENTER);
+		JPanel deckArea = new JPanel();
+		deckArea.setBorder(BorderFactory.createLineBorder(Color.white));
 
-		JPanel deckArea = new JPanel(new BorderLayout());
-		deckArea.setOpaque(false);
-		deckArea.setBorder(BorderFactory.createTitledBorder("Deck"));
-		deckArea.setPreferredSize(new Dimension(130, 190));
-		Card deckCard = new Card(1, Card.Suit.Spades);
-		deckCard.hide();
-		deckArea.add(deckCard, BorderLayout.CENTER);
-		dealerArea.add(deckArea, BorderLayout.EAST);
-		
-		//creates cardarea
-		JPanel cardArea = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 20));
-		cardArea.setBorder(BorderFactory.createLineBorder(Color.red));
+		JPanel dealcardsarea = new JPanel(new BorderLayout());
+		dealcardsarea.setBorder(BorderFactory.createLineBorder(Color.white));
+
+		dealerArea.add(deckArea);
+		dealerArea.add(dealcardsarea);
+
+		// creates cardarea
+		cardArea = new JPanel(new FlowLayout());
+		cardArea.setBorder(BorderFactory.createLineBorder(Color.RED, 2));
 		cardArea.setOpaque(false);
-		cardArea.setPreferredSize(new Dimension(1400, 200));
 
-		//creates playarea
+		// creates playarea
 		JPanel playArea = new JPanel(new GridBagLayout());
-		playArea.setBorder(BorderFactory.createLineBorder(Color.pink));
+		playArea.setBorder(BorderFactory.createLineBorder(Color.pink, 2));
 		playArea.setOpaque(false);
-		playArea.setPreferredSize(new Dimension(1400, 140));
+		playArea.setPreferredSize(new Dimension(1400, 250));
 
-		//constraints for panels
-		GridBagConstraints dealcon = new GridBagConstraints();
-		dealcon.gridx = 0;
-		dealcon.gridy = 0;
-		dealcon.weightx = 1;
-		dealcon.fill = GridBagConstraints.HORIZONTAL;
-		dealcon.anchor = GridBagConstraints.SOUTH;
-		dealcon.insets = new Insets(10, 0, 10, 0);
-
-		GridBagConstraints playcon = new GridBagConstraints();
-		playcon.gridx = 0;
-		playcon.gridy = 1;
-		playcon.weightx = 1;
-		playcon.fill = GridBagConstraints.HORIZONTAL;
-		playcon.anchor = GridBagConstraints.SOUTH;
-		playcon.insets = new Insets(10, 0, 10, 0);
-
+		// constraints for buttons
 		GridBagConstraints btncon = new GridBagConstraints();
+		btncon.gridy = 0;
+		btncon.insets = new Insets(10, 15, 10, 15);
+
+		// creates buttons
+		JButton hbtn = new JButton("Hit");
+		hbtn.setPreferredSize(new Dimension(140, 60));
+		hbtn.setFont(new Font("Arial", Font.BOLD, 20));
 		btncon.gridx = 0;
-		btncon.gridy = 2;
-		btncon.weightx = 1;
-		btncon.weighty = 0;
-		btncon.fill = GridBagConstraints.NONE;
-		btncon.anchor = GridBagConstraints.NORTH;
+		playArea.add(hbtn, btncon);
 
-		//constraints for buttons
-		GridBagConstraints hcon = new GridBagConstraints();
-		hcon.gridx = 0;
-		hcon.gridy = 0;
-		hcon.insets = new Insets(10, 10, 10, 30);
-		hcon.anchor = GridBagConstraints.CENTER;
+		JButton sbtn = new JButton("Stand");
+		sbtn.setPreferredSize(new Dimension(140, 60));
+		sbtn.setFont(new Font("Arial", Font.BOLD, 20));
+		btncon.gridx = 1;
+		playArea.add(sbtn, btncon);
 
-		GridBagConstraints scon = new GridBagConstraints();
-		scon.gridx = 1;
-		scon.gridy = 0;
-		scon.insets = new Insets(10, 30, 10, 10);
-		scon.anchor = GridBagConstraints.CENTER;
+		cont.add(dealerArea, BorderLayout.NORTH);
+		cont.add(cardArea, BorderLayout.CENTER);
+		cont.add(playArea, BorderLayout.SOUTH);
 
-		//creates buttons
-		JButton hbtn = new JButton();
-		hbtn.setText("Hit");
-		hbtn.setFont(new Font("Arial", Font.BOLD, 16));
-		hbtn.setPreferredSize(new Dimension(100, 50));
-		playArea.add(hbtn, hcon);
-
-		JButton sbtn = new JButton();
-		sbtn.setText("Stand");
-		sbtn.setFont(new Font("Arial", Font.BOLD, 16));
-		sbtn.setPreferredSize(new Dimension(100, 50));
-		playArea.add(sbtn, scon);
-
-		cont.add(dealerArea, dealcon);
-		cont.add(cardArea, playcon);
-		cont.add(playArea, btncon);
-
-
-
-		//button logic
+		// button logic
 		hbtn.addActionListener(e -> {
-			Card card = randomCard();
-			cardArea.add(card);
-			cardArea.revalidate();
-			cardArea.repaint();
-			System.out.println(card);
 		});
 
 		this.setVisible(true);
 	}
 
-	public Card randomCard() {
-		int rsuit = (int) (Math.random() * 4) + 1;
-		int rval = (int) (Math.random() * 13) + 1;
-		Card rCard = new Card(rval, Card.Suit.values()[rsuit-1]);
-		return rCard;
+	public JLayeredPane drawPile(Stack<Card> stackIn) {
+
+		Object cards[];
+
+		cards = stackIn.toArray();
+
+		JLayeredPane cardpile = new JLayeredPane();
+		cardpile.setLayout(null);
+
+		Card firstCard = (Card) cards[0];
+		Dimension cardSize = firstCard.getPreferredSize();
+		int offset = 20;
+
+		cardpile.setPreferredSize(new Dimension(cardSize.width,cardSize.height + (cards.length - 1) * offset));
+
+		for (int i = cards.length - 1; i >= 0; i--) {
+			Card card = (Card) cards[i];
+			Dimension size = card.getPreferredSize();
+
+			card.setBounds(0, i * offset, size.width, size.height);
+			cardpile.add(card, Integer.valueOf(cards.length - 1 - i));
+		}
+
+		return cardpile;
+
 	}
+
+
 
 	@Override
 	public void mouseDragged(MouseEvent arg0) {
