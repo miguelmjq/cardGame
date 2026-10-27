@@ -102,7 +102,15 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 		cont.add(playArea, BorderLayout.SOUTH);
 
 		// button logic
-		hbtn.addActionListener(e -> {
+		hbtn.addActionListener(e -> {	
+			game.hit(0);
+			repaint();
+		});
+
+		sbtn.addActionListener(e -> {
+
+			game.stand();
+			repaint();
 		});
 
 		this.setVisible(true);
