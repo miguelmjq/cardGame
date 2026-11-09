@@ -7,7 +7,7 @@ package com.cardGame;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
-
+                         
 import java.awt.color.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -27,6 +27,9 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 
 	/**
 	 * 
+	 */
+	/**
+	 *
 	 */
 	private Blackjack game;
 	private JPanel cardArea;
@@ -102,19 +105,22 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 		cont.add(playArea, BorderLayout.SOUTH);
 
 		// button logic
-		hbtn.addActionListener(e -> {	
+		hbtn.addActionListener(e -> {
+			//sp();
 			game.hit(0);
-			repaint();
+			game.hit(1);
+
 		});
 
 		sbtn.addActionListener(e -> {
-
+			//test();
 			game.stand();
 			repaint();
 		});
 
 		this.setVisible(true);
 	}
+
 
 	public JLayeredPane drawPile(Stack<Card> stackIn) {
 
@@ -145,9 +151,32 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 
 
 
-	@Override
-	public void mouseDragged(MouseEvent arg0) {
 
+	public void sp() {
+		while (!game.isempt()) {
+			game.hit(1);
+		}
+		System.out.println("ccc");
+	}
+	public void test() {
+		int playerwins = 0;
+		int dealerwins = 0;
+		for (int ib = 0; ib < 100; ib++) {
+
+			System.out.println("test " + ib);
+			game.hit(1);
+			game.hit(0);
+			game.hit(0);
+			if (game.stand() == 1) {
+				dealerwins++;
+			} else {
+				playerwins++;
+			}
+			System.out.println("end");
+
+			System.out.println("dw:" + dealerwins + " pw:" + playerwins);
+
+		}
 	}
 
 	@Override
@@ -182,6 +211,12 @@ public class GUI extends JFrame implements ActionListener, MouseListener, MouseM
 
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
+
+	}
+
+	@Override
+	public void mouseDragged(MouseEvent e) {
+
 
 	}
 }
